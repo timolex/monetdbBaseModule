@@ -80,3 +80,7 @@ tags
 
 # packaging
 ._pkg
+
+
+# VS code
+.vscode

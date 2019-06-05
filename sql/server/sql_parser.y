@@ -2799,6 +2799,11 @@ joined_table:
 	  append_symbol(l, $1);
 	  append_symbol(l, $4);
 	  $$ = _symbol_create_list( SQL_CROSS, l); }
+ |  ADD table_ref
+	{ dlist *l = L();
+	  append_symbol(l, $2);
+	  append_symbol(l, $2);
+	  $$ = _symbol_create_list( SQL_CROSS, l); }
  |  table_ref UNIONJOIN table_ref join_spec
 	{ dlist *l = L();
 	  append_symbol(l, $1);
