@@ -94,6 +94,7 @@ scanner_init_keywords(void)
 
 	keywords_insert("ALTER", ALTER);
 	keywords_insert("ADD", ADD);
+	keywords_insert("TUJADD", TUJADD);
 	keywords_insert("AND", AND);
 	keywords_insert("MEDIAN", AGGR);
 	keywords_insert("CORR", AGGR2);

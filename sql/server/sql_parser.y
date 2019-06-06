@@ -555,6 +555,9 @@ int yydebug=1;
 %token XMLVALIDATE RETURNING LOCATION ID ACCORDING XMLSCHEMA URI XMLAGG
 %token FILTER
 
+/* basic module token*/
+%token TUJADD
+
 
 /* operators */
 %left UNION EXCEPT INTERSECT CORRESPONDING UNIONJOIN
@@ -2798,6 +2801,11 @@ joined_table:
 	{ dlist *l = L();
 	  append_symbol(l, $1);
 	  append_symbol(l, $4);
+	  $$ = _symbol_create_list( SQL_CROSS, l); }
+ |  TUJADD table_ref
+	{ dlist *l = L();
+	  append_symbol(l, $2);
+	  append_symbol(l, $2);
 	  $$ = _symbol_create_list( SQL_CROSS, l); }
  |  ADD table_ref
 	{ dlist *l = L();
