@@ -144,6 +144,7 @@ typedef enum operator_type {
 	op_project, 		/* includes order by */
 	op_select,	
 	op_join,
+	op_addition,
 	op_left,
 	op_right,
 	op_full,

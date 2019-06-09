@@ -5042,8 +5042,8 @@ rel_addquery(mvc *sql, sql_rel *rel, symbol *q)
 	if (!t1)
 		return NULL;
 
-	// TODO: Call rel_addition([...]) here (to be implemented) 
-	rel = rel_crossproduct(sql->sa, t1, t1, op_join);
+	// TODO: Update operation param
+	rel = rel_addition(sql->sa, t1, op_join);
 	return rel;
 }
 	

@@ -372,6 +372,21 @@ rel_crossproduct(sql_allocator *sa, sql_rel *l, sql_rel *r, operator_type join)
 	return rel;
 }
 
+// TODO: Update this function to fit self-addition
+sql_rel *
+rel_addition(sql_allocator *sa, sql_rel *l, operator_type join)
+{
+	sql_rel *rel = rel_create(sa);
+
+	rel->l = l;
+	rel->r = l;
+	rel->op = join;
+	rel->exps = NULL;
+	rel->card = CARD_MULTI;
+	rel->nrcols = 2 * (l->nrcols);
+	return rel;
+}
+
 sql_rel *
 rel_topn(sql_allocator *sa, sql_rel *l, list *exps )
 {
