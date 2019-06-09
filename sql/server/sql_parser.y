@@ -2805,13 +2805,11 @@ joined_table:
  |  TUJADD table_ref
 	{ dlist *l = L();
 	  append_symbol(l, $2);
-	  append_symbol(l, $2);
-	  $$ = _symbol_create_list( SQL_CROSS, l); }
+	  $$ = _symbol_create_list( SQL_ADD, l); }
  |  ADD table_ref
 	{ dlist *l = L();
 	  append_symbol(l, $2);
-	  append_symbol(l, $2);
-	  $$ = _symbol_create_list( SQL_CROSS, l); }
+	  $$ = _symbol_create_list( SQL_ADD, l); }
  |  table_ref UNIONJOIN table_ref join_spec
 	{ dlist *l = L();
 	  append_symbol(l, $1);

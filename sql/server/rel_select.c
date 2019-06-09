@@ -211,6 +211,7 @@ rel_orderby(mvc *sql, sql_rel *l)
 static sql_rel * rel_setquery(mvc *sql, sql_rel *rel, symbol *sq);
 static sql_rel * rel_joinquery(mvc *sql, sql_rel *rel, symbol *sq);
 static sql_rel * rel_crossquery(mvc *sql, sql_rel *rel, symbol *q);
+static sql_rel * rel_addquery(mvc *sql, sql_rel *rel, symbol *q);
 static sql_rel * rel_unionjoinquery(mvc *sql, sql_rel *rel, symbol *sq);
 
 static sql_rel *
@@ -340,6 +341,14 @@ query_exp_optname(mvc *sql, sql_rel *r, symbol *q)
 	case SQL_CROSS:
 	{
 		sql_rel *tq = rel_crossquery(sql, r, q);
+
+		if (!tq)
+			return NULL;
+		return rel_table_optname(sql, tq, q->data.lval->t->data.sym);
+	}
+	case SQL_ADD:
+	{
+		sql_rel *tq = rel_addquery(sql, r, q);
 
 		if (!tq)
 			return NULL;
@@ -5020,6 +5029,21 @@ rel_crossquery(mvc *sql, sql_rel *rel, symbol *q)
 		return NULL;
 
 	rel = rel_crossproduct(sql->sa, t1, t2, op_join);
+	return rel;
+}
+
+static sql_rel *
+rel_addquery(mvc *sql, sql_rel *rel, symbol *q)
+{
+	dnode *n = q->data.lval->h;
+	symbol *tab1 = n->data.sym;
+	sql_rel *t1 = table_ref(sql, rel, tab1);
+
+	if (!t1)
+		return NULL;
+
+	// TODO: Call rel_addition([...]) here (to be implemented) 
+	rel = rel_crossproduct(sql->sa, t1, t1, op_join);
 	return rel;
 }
 	

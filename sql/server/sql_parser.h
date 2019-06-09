@@ -91,6 +91,7 @@ typedef enum tokens {
 	SQL_UPDATE,
 	SQL_STORAGE,
 	SQL_CROSS,
+	SQL_ADD,
 	SQL_JOIN,
 	SQL_SELECT,
 	SQL_CONNECT,
