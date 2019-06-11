@@ -288,6 +288,8 @@ op2string(operator_type op)
 	case op_update: 
 	case op_delete: 
 		return "modify op";
+	case op_addition:
+		return "addition";
 	default:
 		return "unknown";
 	}
@@ -377,7 +379,8 @@ rel_print_(mvc *sql, stream  *fout, sql_rel *rel, int depth, list *refs, int dec
 		if (rel->exps && rel->flag == DDL_PSM) 
 			exps_print(sql, fout, rel->exps, depth, 1, 0);
 		break;
-	case op_join: 
+	case op_addition: 
+	case op_join:
 	case op_left: 
 	case op_right: 
 	case op_full: 
@@ -417,6 +420,8 @@ rel_print_(mvc *sql, stream  *fout, sql_rel *rel, int depth, list *refs, int dec
 			r = "except";
 		else if (!rel->exps && rel->op == op_join)
 			r = "crossproduct";
+		else if (!rel->exps && rel->op == op_addition)
+			r = "addition";
 		print_indent(sql, fout, depth, decorate);
 		if (need_distinct(rel))
 			mnstr_printf(fout, "distinct ");
@@ -529,7 +534,8 @@ rel_print_refs(mvc *sql, stream* fout, sql_rel *rel, int depth, list *refs, int 
 	case op_table:
 	case op_ddl:
 		break;
-	case op_join: 
+	case op_addition: 
+	case op_join:
 	case op_left: 
 	case op_right: 
 	case op_full: 

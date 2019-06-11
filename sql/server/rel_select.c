@@ -55,6 +55,7 @@ rel_table_projections( mvc *sql, sql_rel *rel, char *tname, int level )
 	}
 
 	switch(rel->op) {
+	case op_addition:
 	case op_join:
 	case op_left:
 	case op_right:
@@ -3626,6 +3627,7 @@ rel_projections_(mvc *sql, sql_rel *rel)
 		return new_exp_list(sql->sa);
 
 	switch(rel->op) {
+	case op_addition:
 	case op_join:
 	case op_left:
 	case op_right:
@@ -5042,8 +5044,7 @@ rel_addquery(mvc *sql, sql_rel *rel, symbol *q)
 	if (!t1)
 		return NULL;
 
-	// TODO: Update operation param
-	rel = rel_addition(sql->sa, t1, op_join);
+	rel = rel_addition(sql->sa, t1, op_addition);
 	return rel;
 }
 	

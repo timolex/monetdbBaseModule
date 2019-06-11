@@ -1221,6 +1221,7 @@ rel_find_exp( sql_rel *rel, sql_exp *e)
 		case op_left:
 		case op_right:
 		case op_full:
+		case op_addition:
 		case op_join:
 		case op_apply:
 			ne = rel_find_exp(rel->l, e);

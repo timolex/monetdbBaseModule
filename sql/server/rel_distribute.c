@@ -31,6 +31,7 @@ has_remote_or_replica( sql_rel *rel )
 	}
 	case op_table:
 		break;
+	case op_addition: 
 	case op_join: 
 	case op_left: 
 	case op_right: 
@@ -143,6 +144,7 @@ replica(mvc *sql, sql_rel *rel, char *uri)
 	}
 	case op_table:
 		break;
+	case op_addition: 
 	case op_join: 
 	case op_left: 
 	case op_right: 
@@ -216,6 +218,7 @@ distribute(mvc *sql, sql_rel *rel)
 	}
 	case op_table:
 		break;
+	case op_addition: 
 	case op_join: 
 	case op_left: 
 	case op_right: 
@@ -284,6 +287,7 @@ rel_remote_func(mvc *sql, sql_rel *rel)
 	case op_basetable: 
 	case op_table:
 		break;
+	case op_addition: 
 	case op_join: 
 	case op_left: 
 	case op_right: 

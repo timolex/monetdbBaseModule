@@ -1333,6 +1333,7 @@ rel2bin_args( mvc *sql, sql_rel *rel, list *args)
 	case op_basetable:
 	case op_table:
 		break;
+	case op_addition: 
 	case op_join: 
 	case op_left: 
 	case op_right: 
@@ -4566,6 +4567,7 @@ subrel_bin(mvc *sql, sql_rel *rel, list *refs)
 		s = rel2bin_table(sql, rel, refs);
 		sql->type = Q_TABLE;
 		break;
+	case op_addition: 
 	case op_join: 
 	case op_left: 
 	case op_right: 
