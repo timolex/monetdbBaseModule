@@ -867,6 +867,21 @@ stmt_tinter(sql_allocator *sa, stmt *op1, stmt *op2)
 }
 
 stmt *
+stmt_addition(sql_allocator *sa, stmt *op1, stmt *op2, comp_type cmptype)
+{
+	// TODO: Change st_type to st_addition eventually
+	stmt *s = stmt_create(sa, st_join);
+
+	s->op1 = op1;
+	s->op2 = op2;
+	s->flag = cmptype;
+	s->key = 0;
+	// TODO: Change this value to 1 once st_addition was implemented
+	s->nrcols = 2;
+	return s;
+}
+
+stmt *
 stmt_join(sql_allocator *sa, stmt *op1, stmt *op2, comp_type cmptype)
 {
 	stmt *s = stmt_create(sa, st_join);

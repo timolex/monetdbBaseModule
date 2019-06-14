@@ -1631,6 +1631,32 @@ releqjoin( mvc *sql, list *l1, list *l2, int used_hash, comp_type cmp_op, int ne
 }
 
 static stmt *
+rel2bin_addition(mvc *sql, sql_rel *rel, list *refs)
+{
+	list *lst = sa_list(sql->sa);
+
+	stmt *left = NULL;
+	stmt *right = NULL;
+	stmt *addition = NULL;
+
+	left = subrel_bin(sql, rel->l, refs);
+	right = subrel_bin(sql, rel->r, refs);
+
+	assert(right && left);
+
+	stmt *l = bin_first_column(sql->sa, left);
+	stmt *r = bin_first_column(sql->sa, right);
+
+
+	// TODO: Check, if we need to update cmp_all to something different eventually
+	addition = stmt_addition(sql->sa, l, r, cmp_all);
+
+	list_append(lst, addition);
+
+	return stmt_list(sql->sa, lst);
+}
+
+static stmt *
 rel2bin_join( mvc *sql, sql_rel *rel, list *refs)
 {
 	list *l; 
@@ -4568,6 +4594,10 @@ subrel_bin(mvc *sql, sql_rel *rel, list *refs)
 		sql->type = Q_TABLE;
 		break;
 	case op_addition: 
+		s = rel2bin_addition(sql, rel, refs);
+		// TODO check if this is necessary:
+		sql->type = Q_TABLE;
+		break;
 	case op_join: 
 	case op_left: 
 	case op_right: 
