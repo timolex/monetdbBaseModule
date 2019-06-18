@@ -1333,7 +1333,6 @@ rel2bin_args( mvc *sql, sql_rel *rel, list *args)
 	case op_basetable:
 	case op_table:
 		break;
-	case op_addition: 
 	case op_join: 
 	case op_left: 
 	case op_right: 
@@ -1352,6 +1351,7 @@ rel2bin_args( mvc *sql, sql_rel *rel, list *args)
 	case op_groupby: 
 		if (rel->r) 
 			args = exps2bin_args(sql, rel->r, args);
+	case op_addition: 
 	case op_project:
 	case op_select: 
 	case op_topn: 
@@ -1636,20 +1636,16 @@ rel2bin_addition(mvc *sql, sql_rel *rel, list *refs)
 	list *lst = sa_list(sql->sa);
 
 	stmt *left = NULL;
-	stmt *right = NULL;
 	stmt *addition = NULL;
 
 	left = subrel_bin(sql, rel->l, refs);
-	right = subrel_bin(sql, rel->r, refs);
 
-	assert(right && left);
+	assert(left);
 
+	// TODO: Use column([...]) instead (for better readability)
 	stmt *l = bin_first_column(sql->sa, left);
-	stmt *r = bin_first_column(sql->sa, right);
 
-
-	// TODO: Check, if we need to update cmp_all to something different eventually
-	addition = stmt_addition(sql->sa, l, r, cmp_all);
+	addition = stmt_addition(sql->sa, l, l, cmp_all);
 
 	list_append(lst, addition);
 
@@ -4595,7 +4591,6 @@ subrel_bin(mvc *sql, sql_rel *rel, list *refs)
 		break;
 	case op_addition: 
 		s = rel2bin_addition(sql, rel, refs);
-		// TODO check if this is necessary:
 		sql->type = Q_TABLE;
 		break;
 	case op_join: 

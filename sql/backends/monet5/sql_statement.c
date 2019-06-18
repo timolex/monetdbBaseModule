@@ -324,6 +324,7 @@ stmt_deps(list *dep_list, stmt *s, int depend_type, int dir)
 
 			case st_group:
 
+			case st_addition:
 			case st_uselect:
 			case st_uselect2:
 				if (s->op1)
@@ -869,15 +870,14 @@ stmt_tinter(sql_allocator *sa, stmt *op1, stmt *op2)
 stmt *
 stmt_addition(sql_allocator *sa, stmt *op1, stmt *op2, comp_type cmptype)
 {
-	// TODO: Change st_type to st_addition eventually
-	stmt *s = stmt_create(sa, st_join);
+	stmt *s = stmt_create(sa, st_addition);
 
 	s->op1 = op1;
+	// TODO: Check, if op2 is really necessary (-> if yes, also remove it from the signature)
 	s->op2 = op2;
 	s->flag = cmptype;
 	s->key = 0;
-	// TODO: Change this value to 1 once st_addition was implemented
-	s->nrcols = 2;
+	s->nrcols = 1;
 	return s;
 }
 
@@ -1216,6 +1216,7 @@ tail_type(stmt *st)
 	case st_const:
 		return tail_type(st->op2);
 
+	case st_addition:
 	case st_uselect:
 	case st_uselect2:
 	case st_limit:
@@ -1300,6 +1301,7 @@ stmt_has_null(stmt *s)
 	switch (s->type) {
 	case st_aggr:
 	case st_Nop:
+	case st_addition:
 	case st_uselect:
 	case st_uselect2:
 	case st_atom:
@@ -1372,6 +1374,7 @@ _column_name(sql_allocator *sa, stmt *st)
 	case st_result:
 	case st_append:
 	case st_gen_group:
+	case st_addition:
 	case st_uselect:
 	case st_uselect2:
 	case st_limit:
@@ -1443,6 +1446,7 @@ _table_name(sql_allocator *sa, stmt *st)
 	case st_group:
 	case st_result:
 	case st_gen_group:
+	case st_addition:
 	case st_uselect:
 	case st_uselect2:
 	case st_limit:
@@ -1498,6 +1502,7 @@ schema_name(sql_allocator *sa, stmt *st)
 	case st_result:
 	case st_append:
 	case st_gen_group:
+	case st_addition:
 	case st_uselect:
 	case st_uselect2:
 	case st_limit:

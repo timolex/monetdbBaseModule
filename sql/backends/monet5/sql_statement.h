@@ -87,6 +87,8 @@ typedef enum stmt_type {
 
 	st_alias,
 
+	st_addition,
+
 	/* used internally only */
 	st_list,
 

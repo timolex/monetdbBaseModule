@@ -116,7 +116,6 @@ rel_copy( sql_allocator *sa, sql_rel *i )
 		if (i->r)
 			rel->r = (i->r)?list_dup(i->r, (fdup)NULL):NULL;
 		break;
-	case op_addition:
 	case op_join:
 	case op_left:
 	case op_right:
@@ -124,6 +123,7 @@ rel_copy( sql_allocator *sa, sql_rel *i )
 	case op_apply:
 	case op_semi:
 	case op_anti:
+	case op_addition:
 	case op_project:
 	case op_select:
 	default:
@@ -171,7 +171,6 @@ rel_bind_column_(mvc *sql, sql_rel **p, sql_rel *rel, const char *cname )
 	int ambiguous = 0;
 	sql_rel *l = NULL, *r = NULL;
 	switch(rel->op) {
-	case op_addition:
 	case op_join:
 	case op_left:
 	case op_right:
@@ -199,6 +198,7 @@ rel_bind_column_(mvc *sql, sql_rel **p, sql_rel *rel, const char *cname )
 	case op_except:
 	case op_inter:
 	case op_groupby:
+	case op_addition:
 	case op_project:
 	case op_table:
 	case op_basetable:
@@ -374,19 +374,16 @@ rel_crossproduct(sql_allocator *sa, sql_rel *l, sql_rel *r, operator_type join)
 	return rel;
 }
 
-// TODO: Update this function to fit self-addition
 sql_rel *
 rel_addition(sql_allocator *sa, sql_rel *l, operator_type addition)
 {
 	sql_rel *rel = rel_create(sa);
 
 	rel->l = l;
-	rel->r = l;
 	rel->op = addition;
 	rel->exps = NULL;
 	rel->card = CARD_MULTI;
-	// TODO: remove '2 *' once self-addition is implemented, as it yields the same nrcols as an input relation
-	rel->nrcols = 2 * (l->nrcols);
+	rel->nrcols = l->nrcols;
 	return rel;
 }
 
@@ -755,7 +752,6 @@ rel_projections(mvc *sql, sql_rel *rel, const char *tname, int settname, int int
 		return new_exp_list(sql->sa);
 
 	switch(rel->op) {
-	case op_addition:
 	case op_join:
 	case op_left:
 	case op_right:
@@ -772,6 +768,7 @@ rel_projections(mvc *sql, sql_rel *rel, const char *tname, int settname, int int
 		}
 		return exps;
 	case op_groupby:
+	case op_addition:
 	case op_project:
 	case op_basetable:
 	case op_table:
@@ -828,7 +825,6 @@ rel_bind_path_(sql_rel *rel, sql_exp *e, list *path )
 	int found = 0;
 
 	switch (rel->op) {
-	case op_addition:
 	case op_join:
 	case op_left:
 	case op_right:
@@ -857,6 +853,7 @@ rel_bind_path_(sql_rel *rel, sql_exp *e, list *path )
 			break;
 		}
 	case op_groupby:
+	case op_addition:
 	case op_project:
 	case op_table:
 	case op_basetable:

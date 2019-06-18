@@ -55,7 +55,6 @@ rel_table_projections( mvc *sql, sql_rel *rel, char *tname, int level )
 	}
 
 	switch(rel->op) {
-	case op_addition:
 	case op_join:
 	case op_left:
 	case op_right:
@@ -76,6 +75,7 @@ rel_table_projections( mvc *sql, sql_rel *rel, char *tname, int level )
 	case op_union:
 	case op_except:
 	case op_inter:
+	case op_addition:
 	case op_project:
 		if (!is_processed(rel) && level == 0)
 			return rel_table_projections( sql, rel->l, tname, level+1);
@@ -3627,7 +3627,6 @@ rel_projections_(mvc *sql, sql_rel *rel)
 		return new_exp_list(sql->sa);
 
 	switch(rel->op) {
-	case op_addition:
 	case op_join:
 	case op_left:
 	case op_right:
@@ -3637,6 +3636,7 @@ rel_projections_(mvc *sql, sql_rel *rel)
 		exps = list_merge( exps, rexps, (fdup)NULL);
 		return exps;
 	case op_groupby:
+	case op_addition:
 	case op_project:
 	case op_table:
 	case op_basetable:

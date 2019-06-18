@@ -379,7 +379,6 @@ rel_print_(mvc *sql, stream  *fout, sql_rel *rel, int depth, list *refs, int dec
 		if (rel->exps && rel->flag == DDL_PSM) 
 			exps_print(sql, fout, rel->exps, depth, 1, 0);
 		break;
-	case op_addition: 
 	case op_join:
 	case op_left: 
 	case op_right: 
@@ -443,6 +442,7 @@ rel_print_(mvc *sql, stream  *fout, sql_rel *rel, int depth, list *refs, int dec
 		mnstr_printf(fout, ")");
 		exps_print(sql, fout, rel->exps, depth, 1, 0);
 		break;
+	case op_addition: 
 	case op_project:
 	case op_select: 
 	case op_groupby: 
@@ -534,7 +534,6 @@ rel_print_refs(mvc *sql, stream* fout, sql_rel *rel, int depth, list *refs, int 
 	case op_table:
 	case op_ddl:
 		break;
-	case op_addition: 
 	case op_join:
 	case op_left: 
 	case op_right: 
@@ -556,6 +555,7 @@ rel_print_refs(mvc *sql, stream* fout, sql_rel *rel, int depth, list *refs, int 
 			list_append(refs, rel->r);
 		}
 		break;
+	case op_addition: 
 	case op_project:
 	case op_select: 
 	case op_groupby: 
