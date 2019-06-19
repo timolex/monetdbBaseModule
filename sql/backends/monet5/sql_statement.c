@@ -868,15 +868,11 @@ stmt_tinter(sql_allocator *sa, stmt *op1, stmt *op2)
 }
 
 stmt *
-stmt_addition(sql_allocator *sa, stmt *op1, stmt *op2, comp_type cmptype)
+stmt_addition(sql_allocator *sa, stmt *op1)
 {
 	stmt *s = stmt_create(sa, st_addition);
 
 	s->op1 = op1;
-	// TODO: Check, if op2 is really necessary (-> if yes, also remove it from the signature)
-	s->op2 = op2;
-	s->flag = cmptype;
-	s->key = 0;
 	s->nrcols = 1;
 	return s;
 }

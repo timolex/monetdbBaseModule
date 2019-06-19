@@ -380,9 +380,10 @@ rel_addition(sql_allocator *sa, sql_rel *l, operator_type addition)
 	sql_rel *rel = rel_create(sa);
 
 	rel->l = l;
+	rel->r = NULL;
 	rel->op = addition;
 	rel->exps = NULL;
-	rel->card = CARD_MULTI;
+	rel->card = l->card;
 	rel->nrcols = l->nrcols;
 	return rel;
 }

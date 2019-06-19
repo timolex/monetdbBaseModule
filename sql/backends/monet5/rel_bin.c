@@ -1642,10 +1642,12 @@ rel2bin_addition(mvc *sql, sql_rel *rel, list *refs)
 
 	assert(left);
 
-	// TODO: Use column([...]) instead (for better readability)
-	stmt *l = bin_first_column(sql->sa, left);
+	node *n = left->op4.lval->h;
+	stmt *c = n->data;
 
-	addition = stmt_addition(sql->sa, l, l, cmp_all);
+	stmt *l = column(sql->sa, c);
+
+	addition = stmt_addition(sql->sa, l);
 
 	list_append(lst, addition);
 
