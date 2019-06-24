@@ -173,6 +173,7 @@ int yydebug=1;
 	predicate
 	filter_exp
 	joined_table
+	selfadded_table
 	join_spec
 	search_condition
 	and_exp
@@ -2792,6 +2793,18 @@ opt_where_clause:
  ;
 
 	/* query expressions */
+selfadded_table:
+   '(' selfadded_table ')'
+   	{ $$ = $2; }
+ | TUJADD table_ref
+	{ dlist *l = L();
+	  append_symbol(l, $2);
+	  $$ = _symbol_create_list( SQL_ADD, l); }
+ |  ADD table_ref
+	{ dlist *l = L();
+	  append_symbol(l, $2);
+	  $$ = _symbol_create_list( SQL_ADD, l); }
+;
 
 joined_table:
    '(' joined_table ')'
@@ -2802,14 +2815,6 @@ joined_table:
 	  append_symbol(l, $1);
 	  append_symbol(l, $4);
 	  $$ = _symbol_create_list( SQL_CROSS, l); }
- |  TUJADD table_ref
-	{ dlist *l = L();
-	  append_symbol(l, $2);
-	  $$ = _symbol_create_list( SQL_ADD, l); }
- |  ADD table_ref
-	{ dlist *l = L();
-	  append_symbol(l, $2);
-	  $$ = _symbol_create_list( SQL_ADD, l); }
  |  table_ref UNIONJOIN table_ref join_spec
 	{ dlist *l = L();
 	  append_symbol(l, $1);
@@ -3098,6 +3103,8 @@ table_ref:
 				  YYABORT;
 				}
  |  joined_table 		{ $$ = $1;
+				  append_symbol($1->data.lval, NULL); }
+ |  selfadded_table		{ $$ = $1;
 				  append_symbol($1->data.lval, NULL); }
 /* the following rule seems to be redundant ?
  |  '(' joined_table ')' table_name
